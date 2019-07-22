@@ -694,11 +694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\chima\\source\\repos\\FirstProject\\FirstProject\\FirstProject.csproj",
+      "projectUniqueName": "C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\FirstProject.csproj",
       "projectName": "FirstProject",
-      "projectPath": "C:\\Users\\chima\\source\\repos\\FirstProject\\FirstProject\\FirstProject.csproj",
+      "projectPath": "C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\FirstProject.csproj",
       "packagesPath": "C:\\Users\\chima\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\chima\\source\\repos\\FirstProject\\FirstProject\\obj\\",
+      "outputPath": "C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
