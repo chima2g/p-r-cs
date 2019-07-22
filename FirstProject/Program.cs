@@ -24,27 +24,27 @@ namespace FirstProject
 
 //        const CURRENCY_LOOKUP = { $: 0.8 }; //Lookup object for converting foreign currencies into GBP
 
-        private ArrayList convertCSVStrToArr (string csvStr)
+        private string[][] convertCSVStrToArr (string csvStr)
         {
             string[] lines = csvStr.Split("\r\n"); //Get each line of the CSV string
-            ArrayList dataArr = new ArrayList();
+            string[][] dataArr = new string[lines.Length][];
 
             //Convert each line to an array of values and add the array to the array
-            foreach (string line in lines)
+            for (int i = 0; i < lines.Length; i++)
             {
-                dataArr.Add(line.Split(","));
+                dataArr[i] = lines[i].Split(",");
             }
 
             return dataArr;
         }
 
-        string convertArrayToCSVStr ( string[] dataArr)
+        string convertArrayToCSVStr ( string[][] dataArr)
         {
             //Convert the CSV array data to a string and write it to file
             string csvStr = "";
             
             for (int i = 0; i < dataArr.Length; i++) {
-                string csvLine = dataArr[i];
+                string[] csvLine = dataArr[i];
                 csvStr += String.Join(",", csvLine);
                 if (i != dataArr.Length - 1) csvStr += "\r\n";
             }
@@ -160,7 +160,36 @@ namespace FirstProject
             return summaryArr;
         }
 
+        void createCommissionCSV (string inputFileName, string outputFileName, int bonusType) {
+            string csvStr = System.IO.File.ReadAllText(@inputFileName).Trim();
+
+            string[][] csvArr = convertCSVStrToArr(csvStr);
+            string[][] commissionData = getCommissionData(csvArr, bonusType);
+            csvStr = convertArrayToCSVStr(commissionData);
+
+            System.IO.File.WriteAllText(@outputFileName, csvStr);
+        }
+
+        void createCommissionSummaryCSV(string inputFileName, string outputFileName)
+        {
+            string csvStr = System.IO.File.ReadAllText(@inputFileName).Trim();
+
+            string[][] csvArr = convertCSVStrToArr(csvStr);
+            string[][] commissionSummaryData = getCommissionSummaryData(csvArr);
+            csvStr = convertArrayToCSVStr(commissionSummaryData);
+
+            System.IO.File.WriteAllText(@outputFileName, csvStr);
+        }
+
         static void Main(string[] args)
+        {
+            new CommissionLogger().createCommissionCSV("C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\Cases.csv", "C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\basicPay.csv", 0);
+            new CommissionLogger().createCommissionCSV("C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\Cases.csv", "C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\bonus1Pay.csv", 1);
+            new CommissionLogger().createCommissionCSV("C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\Cases.csv", "C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\bonus2Pay.csv", 2);
+            new CommissionLogger().createCommissionSummaryCSV("C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\bonus2Pay.csv", "C:\\Users\\chima\\source\\repos\\p-r-cs\\FirstProject\\bonusSummarys.csv");
+        }
+
+        static void _Main(string[] args)
         {
             string[][] inputCaseA = new string[2][];
             inputCaseA [0] = new string[] { "BrokerName", "CaseId", "CaseValue" };
