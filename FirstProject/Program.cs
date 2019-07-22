@@ -22,7 +22,8 @@ namespace FirstProject
 
         const CURRENCY_LOOKUP = { $: 0.8 }; //Lookup object for converting foreign currencies into GBP
 
-        private ArrayList convertCSVStrToArr (string csvStr) {
+        private ArrayList convertCSVStrToArr (string csvStr)
+        {
             string[] lines = csvStr.Split("\r\n"); //Get each line of the CSV string
             ArrayList dataArr = new ArrayList();
 
@@ -35,7 +36,8 @@ namespace FirstProject
             return dataArr;
         }
 
-        string convertArrayToCSVStr ( string[] dataArr) {
+        string convertArrayToCSVStr ( string[] dataArr)
+        {
             //Convert the CSV array data to a string and write it to file
             string csvStr = "";
             
@@ -48,7 +50,30 @@ namespace FirstProject
             return csvStr;
         }
 
-        private int bonusCalculator (string caseValue, decimal threshold, decimal target) {
+        string[][] convertCasesToGBP (string[][] brokerCases, string currency, int conversionRate)
+        {
+            string[][] convertedCases = brokerCases;
+
+            //Starts at index 1 to ignore header
+            for (int i = 1; i < convertedCases.Length; i++)
+            {
+                string[] _case = convertedCases[i];
+                string caseValue = _case[2];
+                if (caseValue.StartsWith(currency))
+                {
+                    double _caseValue = Double.Parse(caseValue.Substring(1));
+                    double gbpVal = Math.Round((_caseValue * conversionRate), 2);   //Calculate the converted amount
+                    _case[2] = "£" + gbpVal;
+                }
+
+                convertedCases[i] = _case;
+            }
+
+            return convertedCases;
+        }
+
+        private int bonusCalculator (string caseValue, decimal threshold, decimal target)
+        {
             decimal caseValueAsDec = decimal.Parse(caseValue.Substring(1)); //Convert caseValue into float format
             int totalBonus = 0;
 
@@ -59,8 +84,6 @@ namespace FirstProject
 
             return totalBonus;
         }
-
-
 
         static void Main(string[] args)
         {
