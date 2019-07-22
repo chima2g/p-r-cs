@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -119,29 +120,41 @@ namespace FirstProject
 
         string[][] getCommissionSummaryData(string[][] brokerCases)
         {
-            IDictionary<string, int> summaryObj = new Dictionary<string, int>();  //Lookup object to keep track of each broker's total commission
-
-            string[][] summaryArr = new string[brokerCases.Length][];
-            summaryArr[0] = new string[] { "BrokerName", "TotalCommission" };
+            Dictionary<string, double> summaryObj = new Dictionary<string, double>();  //Lookup object to keep track of each broker's total commission
 
             for (int i = 1; i < brokerCases.Length; i++) //Starts at index 1 to ignore header
             {
                 string[] _case = brokerCases[i];
-                string[] commissionObj = new string[2];
 
-                string baseCommission = _case[1]; 
-                string bonusCommission = _case[2];
+                string brokerName = _case[0];
+                string baseCommission = _case[2]; 
+                string bonusCommission = _case[3];
 
-                int currentTotal = 0;
-                int result;
+                double currentTotal = 0;
+                double result;
 
                 //Get the broker's current total from the lookup object
-                if (summaryObj.TryGetValue(_case[0], out result))
+                if (summaryObj.TryGetValue(brokerName, out result))
                     currentTotal = result;
 
-//                summaryObj[BrokerName] =
-  //            currentTotal + Double.Parse(baseCommission.Substring(1)) + Double.Parse(bonusCommission.Substring(1));
-                        
+                currentTotal += Double.Parse(baseCommission.Substring(1)) + Double.Parse(bonusCommission.Substring(1));
+
+                if(summaryObj.ContainsKey(brokerName))
+                    summaryObj.Remove(brokerName);
+
+                summaryObj.Add(brokerName, currentTotal);
+            }
+
+            string[][] summaryArr = new string[summaryObj.Keys.Count + 1][];
+            summaryArr[0] = new string[] { "BrokerName", "TotalCommission" };
+
+            for (int i = 0; i < summaryObj.Count; i++)
+            {
+                string[] summary = new string[2];
+                summary[0] = summaryObj.Keys.ElementAt(i);
+                summary[1] = "£" + summaryObj[summaryObj.Keys.ElementAt(i)];
+
+                summaryArr[i + 1] = summary;
             }
 
             return summaryArr;
@@ -156,6 +169,23 @@ namespace FirstProject
             CommissionLogger commissioner = new CommissionLogger();
 
             string[][] output = commissioner.getCommissionData(inputCaseA, 1);
+
+            for (int i = 0; i < output.Length; i++)
+            {
+                for (int j = 0; j < output[i].Length; j++)
+                {
+                    Console.WriteLine(output[i][j]);
+                }
+            }
+
+            Console.WriteLine("");
+
+            string[][] caseData = new string[3][];
+            caseData[0] = new string[] { "BrokerName", "CaseId", "BaseCommission", "BonusCommission" };
+            caseData[1] = new string[] { "Emmá", "12", "£125", "£0" };
+            caseData[2] = new string[] { "Emmá", "12", "£125", "£60" };
+
+            output = commissioner.getCommissionSummaryData(caseData);
 
             for (int i = 0; i < output.Length; i++)
             {
