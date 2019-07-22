@@ -35,6 +35,18 @@ namespace FirstProject
             return dataArr;
         }
 
+        string convertArrayToCSVStr ( string[] dataArr) {
+            //Convert the CSV array data to a string and write it to file
+            string csvStr = "";
+            
+            for (int i = 0; i < dataArr.Length; i++) {
+                string csvLine = dataArr[i];
+                csvStr += String.Join(",", csvLine);
+                if (i != dataArr.Length - 1) csvStr += "\r\n";
+            }
+
+            return csvStr;
+        }
 
         private int bonusCalculator (string caseValue, decimal threshold, decimal target) {
             decimal caseValueAsDec = decimal.Parse(caseValue.Substring(1)); //Convert caseValue into float format
