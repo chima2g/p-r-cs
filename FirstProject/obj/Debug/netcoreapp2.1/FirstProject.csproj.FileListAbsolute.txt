@@ -9,3 +9,9 @@ C:\Users\chima\source\repos\FirstProject\FirstProject\obj\Debug\netcoreapp2.1\Fi
 C:\Users\chima\source\repos\FirstProject\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.AssemblyInfo.cs
 C:\Users\chima\source\repos\FirstProject\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.dll
 C:\Users\chima\source\repos\FirstProject\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.pdb
+C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.csprojAssemblyReference.cache
+C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.csproj.CoreCompileInputs.cache
+C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.AssemblyInfoInputs.cache
+C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.AssemblyInfo.cs
+C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.dll
+C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.pdb
