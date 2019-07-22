@@ -15,3 +15,8 @@ C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstPro
 C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.AssemblyInfo.cs
 C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.dll
 C:\Users\chima\source\repos\p-r-cs\FirstProject\obj\Debug\netcoreapp2.1\FirstProject.pdb
+C:\Users\chima\source\repos\p-r-cs\FirstProject\bin\Debug\netcoreapp2.1\FirstProject.deps.json
+C:\Users\chima\source\repos\p-r-cs\FirstProject\bin\Debug\netcoreapp2.1\FirstProject.runtimeconfig.json
+C:\Users\chima\source\repos\p-r-cs\FirstProject\bin\Debug\netcoreapp2.1\FirstProject.runtimeconfig.dev.json
+C:\Users\chima\source\repos\p-r-cs\FirstProject\bin\Debug\netcoreapp2.1\FirstProject.dll
+C:\Users\chima\source\repos\p-r-cs\FirstProject\bin\Debug\netcoreapp2.1\FirstProject.pdb

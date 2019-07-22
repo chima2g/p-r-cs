@@ -72,19 +72,33 @@ namespace FirstProject
             return convertedCases;
         }
 
+        int bonusCalculator(string caseValue, decimal threshold, decimal target)
+        {
+            decimal caseValueAsDec = decimal.Parse(caseValue.Substring(1)); //Convert caseValue into float format
+            int totalBonus = 0;
+
+            //If the broker has hit the bonus threshold, calculate their bonus
+            if (caseValueAsDec > threshold)
+                totalBonus =
+                  (int)((caseValueAsDec - threshold) / target) * BONUS_AMOUNT;
+
+            return totalBonus;
+        }
+
         string[][] getCommissionData (string[][] brokerCases, int bonusCalculation)
         {
             string[][] gBPBrokerCases = convertCasesToGBP(brokerCases, "$", 0.8);
-
             string[][] commissionArr = new string[gBPBrokerCases.Length][];
+            commissionArr[0] = new string[] { "BrokerName", "CaseId", "BaseCommission", "BonusCommission" };
 
             for (int i = 1; i < gBPBrokerCases.Length; i++) //Starts at index 1 to ignore header
             {
                 string[] _case = gBPBrokerCases[i];
-                string[] commissionObj = new string[3];
+                string[] commissionObj = new string[4];
 
                 commissionObj[0] = _case[0];
                 commissionObj[1] = _case[1];
+                commissionObj[2] = "" + BASE_COMMISSION;                
 
                 if (bonusCalculation > 0)
                 {
@@ -94,7 +108,7 @@ namespace FirstProject
                     if (bonusCalculation == BONUS_TYPE_2)
                         bonus += bonusCalculator(_case[2], THRESHOLD_AMOUNT_2, TARGET_AMOUNT_2);
 
-                    commissionObj[2] = "£" + bonus; //Add the bonus key value pair to the commission object
+                    commissionObj[3] = "£" + bonus; //Add the bonus key value pair to the commission object
                 }
 
                 commissionArr[i] = commissionObj;
@@ -108,7 +122,7 @@ namespace FirstProject
             IDictionary<string, int> summaryObj = new Dictionary<string, int>();  //Lookup object to keep track of each broker's total commission
 
             string[][] summaryArr = new string[brokerCases.Length][];
-//            summaryArr[0] = [["BrokerName", "TotalCommission"];
+            summaryArr[0] = new string[] { "BrokerName", "TotalCommission" };
 
             for (int i = 1; i < brokerCases.Length; i++) //Starts at index 1 to ignore header
             {
@@ -133,22 +147,23 @@ namespace FirstProject
             return summaryArr;
         }
 
-        int bonusCalculator (string caseValue, decimal threshold, decimal target)
-        {
-            decimal caseValueAsDec = decimal.Parse(caseValue.Substring(1)); //Convert caseValue into float format
-            int totalBonus = 0;
-
-            //If the broker has hit the bonus threshold, calculate their bonus
-            if (caseValueAsDec > threshold)
-                totalBonus =
-                  (int) ((caseValueAsDec - threshold) / target) * BONUS_AMOUNT;
-
-            return totalBonus;
-        }
-
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            string[][] inputCaseA = new string[2][];
+            inputCaseA [0] = new string[] { "BrokerName", "CaseId", "CaseValue" };
+            inputCaseA [1] = new string[] { "David", "2", "£607947.84" };
+
+            CommissionLogger commissioner = new CommissionLogger();
+
+            string[][] output = commissioner.getCommissionData(inputCaseA, 1);
+
+            for (int i = 0; i < output.Length; i++)
+            {
+                for (int j = 0; j < output[i].Length; j++)
+                {
+                    Console.WriteLine(output[i][j]);
+                }
+            }
         }
     }
 }
