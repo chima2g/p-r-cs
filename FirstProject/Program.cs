@@ -99,7 +99,7 @@ namespace FirstProject
 
                 commissionObj[0] = _case[0];
                 commissionObj[1] = _case[1];
-                commissionObj[2] = "" + BASE_COMMISSION;                
+                commissionObj[2] = "£" + BASE_COMMISSION;                
 
                 if (bonusCalculation > 0)
                 {
@@ -170,6 +170,7 @@ namespace FirstProject
             System.IO.File.WriteAllText(@outputFileName, csvStr);
         }
 
+        //TODO: This method doesn't work
         void createCommissionSummaryCSV(string inputFileName, string outputFileName)
         {
             string csvStr = System.IO.File.ReadAllText(@inputFileName).Trim();
