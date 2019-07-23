@@ -22,7 +22,7 @@ namespace FirstProject
         int TARGET_AMOUNT_1 = 10000;
         int TARGET_AMOUNT_2 = 50000;
 
-//        const CURRENCY_LOOKUP = { $: 0.8 }; //Lookup object for converting foreign currencies into GBP
+        Dictionary<string, double> CURRENCY_LOOKUP = new Dictionary<string, double>() { { "$", 0.8 }}; //Lookup object for converting foreign currencies into GBP
 
         private string[][] convertCSVStrToArr (string csvStr)
         {
@@ -52,7 +52,7 @@ namespace FirstProject
             return csvStr;
         }
 
-        string[][] convertCasesToGBP (string[][] brokerCases, string currency, double conversionRate)
+        string[][] convertCasesToGBP (string[][] brokerCases, Dictionary<string, double> conversionLookup)
         {
             string[][] convertedCases = brokerCases;
 
@@ -60,11 +60,22 @@ namespace FirstProject
             {
                 string[] _case = convertedCases[i];
                 string caseValue = _case[2];
-                if (caseValue.StartsWith(currency))
+
+                if (!caseValue.StartsWith("£"))
                 {
-                    double _caseValue = Double.Parse(caseValue.Substring(1));
-                    double gbpVal = Math.Round((_caseValue * conversionRate), 2);   //Calculate the converted amount
-                    _case[2] = "£" + gbpVal;
+                    string originalCurrency = caseValue.Substring(0, 1);
+                    double conversionRate;
+
+                    if (conversionLookup.TryGetValue(originalCurrency, out conversionRate))
+                    {
+                        double _caseValue = Double.Parse(caseValue.Substring(1));
+                        double gbpVal = Math.Round((_caseValue * conversionRate), 2);   //Calculate the converted amount
+                        _case[2] = "£" + gbpVal;
+                    }
+                    else
+                    {
+                        _case[2] = "£NaN";
+                    }
                 }
 
                 convertedCases[i] = _case;
@@ -73,7 +84,7 @@ namespace FirstProject
             return convertedCases;
         }
 
-        int bonusCalculator(string caseValue, decimal threshold, decimal target)
+        int getBonus(string caseValue, decimal threshold, decimal target)
         {
             decimal caseValueAsDec = decimal.Parse(caseValue.Substring(1)); //Convert caseValue into float format
             int totalBonus = 0;
@@ -88,7 +99,7 @@ namespace FirstProject
 
         string[][] getCommissionData (string[][] brokerCases, int bonusCalculation)
         {
-            string[][] gBPBrokerCases = convertCasesToGBP(brokerCases, "$", 0.8);
+            string[][] gBPBrokerCases = convertCasesToGBP(brokerCases, CURRENCY_LOOKUP);
             string[][] commissionArr = new string[gBPBrokerCases.Length][];
             commissionArr[0] = new string[] { "BrokerName", "CaseId", "BaseCommission", "BonusCommission" };
 
@@ -103,11 +114,11 @@ namespace FirstProject
 
                 if (bonusCalculation > 0)
                 {
-                    int bonus = bonusCalculator(_case[2], THRESHOLD_AMOUNT_1, TARGET_AMOUNT_1);
+                    int bonus = getBonus(_case[2], THRESHOLD_AMOUNT_1, TARGET_AMOUNT_1);
 
                     //Add the additional bonus on if this is for the second bonus structure
                     if (bonusCalculation == BONUS_TYPE_2)
-                        bonus += bonusCalculator(_case[2], THRESHOLD_AMOUNT_2, TARGET_AMOUNT_2);
+                        bonus += getBonus(_case[2], THRESHOLD_AMOUNT_2, TARGET_AMOUNT_2);
 
                     commissionObj[3] = "£" + bonus; //Add the bonus key value pair to the commission object
                 }
@@ -120,7 +131,7 @@ namespace FirstProject
 
         string[][] getCommissionSummaryData(string[][] brokerCases)
         {
-            Dictionary<string, double> summaryObj = new Dictionary<string, double>();  //Lookup object to keep track of each broker's total commission
+            IDictionary<string, double> summaryObj = new Dictionary<string, double>();  //Lookup object to keep track of each broker's total commission
 
             for (int i = 1; i < brokerCases.Length; i++) //Starts at index 1 to ignore header
             {
@@ -170,7 +181,6 @@ namespace FirstProject
             System.IO.File.WriteAllText(@outputFileName, csvStr);
         }
 
-        //TODO: This method doesn't work
         void createCommissionSummaryCSV(string inputFileName, string outputFileName)
         {
             string csvStr = System.IO.File.ReadAllText(@inputFileName).Trim();
@@ -217,6 +227,24 @@ namespace FirstProject
 
             output = commissioner.getCommissionSummaryData(caseData);
 
+            for (int i = 0; i < output.Length; i++)
+            {
+                for (int j = 0; j < output[i].Length; j++)
+                {
+                    Console.WriteLine(output[i][j]);
+                }
+            }
+
+            Console.WriteLine("");
+
+            inputCaseA[1] = new string[] { "David", "2", "£607947.84" };
+
+            string[][] inputCaseB = new string[3][];
+            inputCaseB[0] = new string[] { "BrokerName", "CaseId", "CaseValue" };
+            inputCaseB[1] = new string[] { "Rob", "3378", "£404006.99" };
+            inputCaseB[2] = new string[] { "Stacy", "3379", "$474584.18" };
+
+            output = commissioner.convertCasesToGBP(inputCaseB, commissioner.CURRENCY_LOOKUP);
             for (int i = 0; i < output.Length; i++)
             {
                 for (int j = 0; j < output[i].Length; j++)
